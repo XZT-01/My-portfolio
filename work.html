@@ -1,0 +1,982 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+<title>Ahmed Mahmood — Works</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600&family=Outfit:wght@500;700;900&family=Quicksand:wght@400;500;600&display=swap" rel="stylesheet">
+<style>
+  /* ---------- Base ---------- */
+  *,
+  *::before,
+  *::after {
+    box-sizing: border-box;
+    margin: 0;
+    padding: 0;
+  }
+
+  html,
+  body {
+    height: 100%;
+    width: 100%;
+    overflow-x: hidden;
+    background: #000;
+    color: #fff;
+    font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
+  }
+
+  /* ---------- Stage ---------- */
+  .stage {
+    position: relative;
+    min-height: 100vh;
+    width: 100%;
+    overflow: hidden;
+    background: #050505;
+  }
+
+  /* ---------- Grid layer ---------- */
+  .grid {
+    position: absolute;
+    inset: 0;
+    background-image:
+      linear-gradient(to right, rgba(255, 255, 255, 0.045) 1px, transparent 1px),
+      linear-gradient(to bottom, rgba(255, 255, 255, 0.045) 1px, transparent 1px);
+    background-size: clamp(28px, 4.5vmin, 52px) clamp(28px, 4.5vmin, 52px);
+    background-position: center center;
+    z-index: 1;
+    /* very gentle drift so it feels alive */
+    animation: grid-drift 40s linear infinite;
+  }
+
+  @keyframes grid-drift {
+    0%   { background-position: 0px 0px; }
+    100% { background-position: 52px 52px; }
+  }
+
+  /* ---------- Corner red glows ---------- */
+  .glow-tr,
+  .glow-bl {
+    position: absolute;
+    /* Circle's center sits exactly at the corner,
+       so only one quarter of the circle is visible on screen. */
+    width: 55vmin;
+    height: 55vmin;
+    border-radius: 50%;
+    background: radial-gradient(
+      circle at center,
+      rgba(255, 30, 55, 1) 0%,
+      rgba(245, 18, 45, 0.92) 12%,
+      rgba(225, 10, 38, 0.78) 24%,
+      rgba(190, 5, 30, 0.6) 38%,
+      rgba(140, 0, 22, 0.4) 54%,
+      rgba(85, 0, 16, 0.22) 72%,
+      rgba(35, 0, 8, 0.06) 88%,
+      transparent 100%
+    );
+    filter: blur(15px);
+    z-index: 2;
+    pointer-events: none;
+  }
+
+  .glow-tr {
+    top: -27.5vmin;
+    right: -27.5vmin;
+    animation: glow-pulse 6s ease-in-out infinite;
+  }
+
+  .glow-bl {
+    bottom: -27.5vmin;
+    left: -27.5vmin;
+    animation: glow-pulse 7.5s ease-in-out infinite;
+  }
+
+  @keyframes glow-pulse {
+    0%, 100% { opacity: 0.9; transform: scale(1); }
+    50%      { opacity: 1;   transform: scale(1.04); }
+  }
+
+  /* ---------- Vignette to deepen edges ---------- */
+  .vignette {
+    position: absolute;
+    inset: 0;
+    z-index: 3;
+    pointer-events: none;
+    background: radial-gradient(
+      ellipse at center,
+      transparent 40%,
+      rgba(0, 0, 0, 0.55) 100%
+    );
+  }
+
+  /* ---------- Logo ---------- */
+  .logo {
+    position: absolute;
+    top: clamp(16px, 2.8vmin, 32px);
+    left: clamp(16px, 3vmin, 36px);
+    z-index: 10;
+    height: clamp(30px, 4.5vmin, 50px);
+    width: auto;
+    opacity: 0;
+    transform: translateY(-8px);
+    animation: logo-in 1.1s cubic-bezier(0.22, 1, 0.36, 1) 0.2s forwards;
+    filter: drop-shadow(0 4px 18px rgba(255, 30, 30, 0.35));
+  }
+
+  @keyframes logo-in {
+    to {
+      opacity: 1;
+      transform: translateY(0);
+    }
+  }
+
+  /* ---------- Glass Card ---------- */
+  .card {
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    /* Stays within width AND height. Aspect-ratio 4/5.2 = height/width 1.3, 
+       so to fit vertically: max-width = (available height) / 1.3.
+       82vw on narrow screens, 65vh on short screens, 560px cap on big ones. */
+    width: min(82vw, 65vh, 560px);
+    aspect-ratio: 4 / 5.2;
+    border-radius: clamp(28px, 6vmin, 48px);
+    z-index: 5;
+
+    /* Clean dark glass — no red flood inside */
+    background: linear-gradient(180deg, rgba(8, 3, 4, 0.78), rgba(2, 0, 1, 0.88));
+
+    backdrop-filter: blur(14px) saturate(130%);
+    -webkit-backdrop-filter: blur(14px) saturate(130%);
+
+    /* Glowing red rim — concentrated on the edges, not inside */
+    border: 1px solid rgba(255, 35, 55, 0.55);
+    box-shadow:
+      /* inner red rim (edge only — doesn't bleed into the body) */
+      inset 0 0 32px rgba(255, 22, 42, 0.5),
+      /* hairline on the inside edge for the lit-rim look */
+      inset 0 0 0 1px rgba(255, 50, 70, 0.18),
+      /* subtle glass highlight on top */
+      inset 0 1px 1px rgba(255, 160, 175, 0.12),
+      /* outer red halo — close */
+      0 0 35px rgba(255, 20, 45, 0.35),
+      /* outer red halo — wide, soft */
+      0 0 95px rgba(255, 15, 40, 0.22),
+      /* ambient drop for depth */
+      0 40px 90px rgba(0, 0, 0, 0.6);
+
+    opacity: 0;
+    transform: translate(-50%, -50%) scale(0.96);
+    animation: card-in 1.4s cubic-bezier(0.22, 1, 0.36, 1) 0.5s forwards;
+  }
+
+  /* JUST a slightly brighter glow along the top edge — does NOT flood inside */
+  .card::before {
+    content: "";
+    position: absolute;
+    inset: 0;
+    border-radius: inherit;
+    pointer-events: none;
+    background: radial-gradient(
+      ellipse 80% 14% at 50% 0%,
+      rgba(255, 40, 60, 0.45) 0%,
+      rgba(255, 25, 50, 0.15) 45%,
+      transparent 100%
+    );
+    mix-blend-mode: screen;
+  }
+
+  /* Soft sheen sweeping diagonally for the "liquid glass" hint */
+  .card::after {
+    content: "";
+    position: absolute;
+    inset: 0;
+    border-radius: inherit;
+    pointer-events: none;
+    background: linear-gradient(
+      135deg,
+      rgba(255, 255, 255, 0.06) 0%,
+      rgba(255, 255, 255, 0) 30%,
+      rgba(255, 255, 255, 0) 70%,
+      rgba(255, 200, 210, 0.04) 100%
+    );
+  }
+
+  @keyframes card-in {
+    to {
+      opacity: 1;
+      transform: translate(-50%, -50%) scale(1);
+    }
+  }
+
+  /* ---------- Portrait (me.png) ---------- */
+  .portrait {
+    position: absolute;
+    top: -14%;
+    left: 50%;
+    width: 42%;
+    max-width: 230px;
+    z-index: 6;
+    opacity: 0;
+    transform: translateX(-50%) translateY(-18px);
+    animation: portrait-in 1.2s cubic-bezier(0.22, 1, 0.36, 1) 1.1s forwards;
+    pointer-events: none;
+    filter: drop-shadow(0 18px 30px rgba(255, 20, 40, 0.35))
+            drop-shadow(0 4px 10px rgba(0, 0, 0, 0.6));
+  }
+
+  .portrait img {
+    width: 100%;
+    height: auto;
+    display: block;
+    animation: portrait-float 6s ease-in-out 2.4s infinite;
+  }
+
+  @keyframes portrait-in {
+    to {
+      opacity: 1;
+      transform: translateX(-50%) translateY(0);
+    }
+  }
+
+  @keyframes portrait-float {
+    0%, 100% { transform: translateY(0); }
+    50%      { transform: translateY(-10px); }
+  }
+
+  /* ---------- Title block + scrollable content ---------- */
+  .card-content {
+    position: absolute;
+    top: 25%;
+    left: 7%;
+    right: 7%;
+    bottom: 6%;
+    z-index: 6;
+    text-align: center;
+    color: #fff;
+
+    /* Scrollable inside the glassy card */
+    overflow-y: auto;
+    overflow-x: hidden;
+    padding-right: 6px;
+    scrollbar-width: thin;
+    scrollbar-color: rgba(255, 30, 50, 0.45) transparent;
+  }
+
+  .card-content::-webkit-scrollbar { width: 4px; }
+  .card-content::-webkit-scrollbar-track { background: transparent; }
+  .card-content::-webkit-scrollbar-thumb {
+    background: linear-gradient(180deg, rgba(255, 30, 50, 0.7), rgba(255, 30, 50, 0.25));
+    border-radius: 4px;
+  }
+  .card-content::-webkit-scrollbar-thumb:hover {
+    background: rgba(255, 60, 80, 0.85);
+  }
+
+  .projects-title {
+    font-family: "Outfit", sans-serif;
+    font-weight: 900;
+    font-size: clamp(36px, 5.8vmin, 60px);
+    letter-spacing: 0.02em;
+    line-height: 1;
+    margin: 0 0 clamp(6px, 1vmin, 12px);
+    color: #ff3550;
+    text-shadow:
+      0 0 24px rgba(255, 30, 50, 0.55),
+      0 0 55px rgba(255, 20, 45, 0.35);
+
+    opacity: 0;
+    transform: translateY(14px);
+    animation: text-fade-up 0.9s cubic-bezier(0.22, 1, 0.36, 1) 1.3s forwards;
+  }
+
+  .projects-subtitle {
+    font-family: "Quicksand", sans-serif;
+    font-weight: 500;
+    font-size: clamp(12.5px, 1.9vmin, 18px);
+    letter-spacing: 0.06em;
+    line-height: 1.3;
+    color: rgba(235, 235, 235, 0.62);
+    margin: 0;
+
+    opacity: 0;
+    transform: translateY(12px);
+    animation: text-fade-up 0.8s cubic-bezier(0.22, 1, 0.36, 1) 1.45s forwards;
+  }
+
+  /* ---------- Project list (beautiful row links) ---------- */
+  .projects-list {
+    display: flex;
+    flex-direction: column;
+    gap: clamp(4px, 0.7vmin, 8px);
+    margin-top: clamp(20px, 3.4vmin, 32px);
+    text-align: left;
+  }
+
+  .project-link {
+    position: relative;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: clamp(8px, 1.5vmin, 16px);
+    padding: clamp(11px, 1.8vmin, 16px) clamp(14px, 2.2vmin, 20px);
+    border-radius: clamp(10px, 1.4vmin, 14px);
+    background: rgba(255, 30, 50, 0.035);
+    border: 1px solid rgba(255, 35, 55, 0.15);
+    text-decoration: none;
+    color: inherit;
+    overflow: hidden;
+    transition:
+      background 0.4s ease,
+      border-color 0.4s ease,
+      transform 0.45s cubic-bezier(0.22, 1, 0.36, 1),
+      box-shadow 0.45s ease;
+
+    opacity: 0;
+    transform: translateY(10px);
+    animation: text-fade-up 0.6s cubic-bezier(0.22, 1, 0.36, 1) forwards;
+  }
+
+  /* Cascading entrance for each row */
+  .project-link:nth-child(1) { animation-delay: 1.65s; }
+  .project-link:nth-child(2) { animation-delay: 1.75s; }
+  .project-link:nth-child(3) { animation-delay: 1.85s; }
+  .project-link:nth-child(4) { animation-delay: 1.95s; }
+  .project-link:nth-child(5) { animation-delay: 2.05s; }
+  .project-link:nth-child(6) { animation-delay: 2.15s; }
+  .project-link:nth-child(7) { animation-delay: 2.25s; }
+  .project-link:nth-child(8) { animation-delay: 2.35s; }
+
+  /* Left accent bar — lights up red on hover */
+  .project-link::before {
+    content: "";
+    position: absolute;
+    left: 0;
+    top: 18%;
+    bottom: 18%;
+    width: 2px;
+    background: rgba(255, 35, 55, 0);
+    border-radius: 2px;
+    transition: all 0.4s ease;
+  }
+
+  /* Shimmer sweep on hover */
+  .project-link::after {
+    content: "";
+    position: absolute;
+    inset: 0;
+    background: linear-gradient(
+      120deg,
+      transparent 0%,
+      rgba(255, 60, 80, 0.18) 50%,
+      transparent 100%
+    );
+    transform: translateX(-110%);
+    transition: transform 0.7s cubic-bezier(0.22, 1, 0.36, 1);
+    pointer-events: none;
+  }
+
+  .project-link:hover {
+    background: rgba(255, 30, 50, 0.12);
+    border-color: rgba(255, 65, 85, 0.55);
+    transform: translateX(4px);
+    box-shadow: 0 6px 22px rgba(255, 25, 50, 0.22);
+  }
+
+  .project-link:hover::before {
+    background: rgba(255, 40, 60, 0.95);
+    top: 12%;
+    bottom: 12%;
+  }
+
+  .project-link:hover::after {
+    transform: translateX(110%);
+  }
+
+  .project-info {
+    display: flex;
+    flex-direction: column;
+    gap: 2px;
+    min-width: 0;
+    position: relative;
+    z-index: 1;
+  }
+
+  .project-name {
+    font-family: "Outfit", sans-serif;
+    font-weight: 700;
+    font-size: clamp(13.5px, 1.95vmin, 17.5px);
+    letter-spacing: 0.01em;
+    color: #f5f5f5;
+    transition: color 0.3s ease;
+    line-height: 1.15;
+  }
+
+  .project-tag {
+    font-family: "Inter", sans-serif;
+    font-weight: 400;
+    font-size: clamp(10.5px, 1.4vmin, 12.5px);
+    letter-spacing: 0.02em;
+    color: rgba(255, 255, 255, 0.48);
+    transition: color 0.3s ease;
+  }
+
+  .project-link:hover .project-name { color: #fff; }
+  .project-link:hover .project-tag { color: rgba(255, 200, 210, 0.7); }
+
+  .project-arrow {
+    flex-shrink: 0;
+    width: clamp(16px, 2.2vmin, 20px);
+    height: clamp(16px, 2.2vmin, 20px);
+    color: rgba(255, 50, 70, 0.6);
+    transition: transform 0.4s cubic-bezier(0.22, 1, 0.36, 1),
+                color 0.3s ease;
+    position: relative;
+    z-index: 1;
+  }
+
+  .project-link:hover .project-arrow {
+    transform: translateX(5px);
+    color: #ff5566;
+  }
+
+  /* ---------- Divider before CTA ---------- */
+  .divider {
+    border: none;
+    height: 1px;
+    background: linear-gradient(
+      90deg,
+      transparent 0%,
+      rgba(255, 40, 60, 0.45) 25%,
+      rgba(255, 50, 70, 0.65) 50%,
+      rgba(255, 40, 60, 0.45) 75%,
+      transparent 100%
+    );
+    margin: clamp(22px, 3.5vmin, 32px) 0 clamp(16px, 2.6vmin, 24px);
+
+    opacity: 0;
+    animation: text-fade-up 0.8s cubic-bezier(0.22, 1, 0.36, 1) 2.35s forwards;
+  }
+
+  /* ---------- CTA block ---------- */
+  .cta-block {
+    text-align: center;
+    padding-bottom: clamp(22px, 3vmin, 32px);
+
+    opacity: 0;
+    transform: translateY(10px);
+    animation: text-fade-up 0.9s cubic-bezier(0.22, 1, 0.36, 1) 2.5s forwards;
+  }
+
+  .cta-text {
+    font-family: "Inter", sans-serif;
+    font-weight: 400;
+    font-size: clamp(12.5px, 1.75vmin, 15.5px);
+    line-height: 1.5;
+    letter-spacing: 0.01em;
+    color: rgba(255, 255, 255, 0.7);
+    margin: 0 auto clamp(14px, 2.4vmin, 22px);
+    max-width: 90%;
+  }
+
+  /* ---------- "HIRE ME" primary button ---------- */
+  .btn-hire {
+    display: inline-flex;
+    align-items: center;
+    gap: clamp(8px, 1.2vmin, 12px);
+    padding: clamp(11px, 1.8vmin, 16px) clamp(24px, 3.6vmin, 36px);
+    border-radius: 999px;
+    background: linear-gradient(135deg, #ff2444 0%, #d10c2a 100%);
+    border: 1px solid rgba(255, 90, 110, 0.45);
+    color: #fff;
+    text-decoration: none;
+    font-family: "Outfit", sans-serif;
+    font-weight: 800;
+    font-size: clamp(12px, 1.6vmin, 14.5px);
+    letter-spacing: 0.18em;
+    cursor: pointer;
+    position: relative;
+    overflow: hidden;
+    box-shadow:
+      0 0 32px rgba(255, 25, 50, 0.4),
+      0 6px 22px rgba(255, 20, 45, 0.3),
+      inset 0 0 18px rgba(255, 100, 120, 0.18),
+      inset 0 1px 0 rgba(255, 200, 210, 0.18);
+    transition:
+      transform 0.45s cubic-bezier(0.22, 1, 0.36, 1),
+      box-shadow 0.45s ease,
+      filter 0.4s ease;
+    animation: hire-pulse 4s ease-in-out 3s infinite;
+  }
+
+  /* Shimmer sweep across the hire button */
+  .btn-hire::before {
+    content: "";
+    position: absolute;
+    inset: 0;
+    background: linear-gradient(
+      120deg,
+      transparent 0%,
+      rgba(255, 255, 255, 0.28) 50%,
+      transparent 100%
+    );
+    transform: translateX(-110%);
+    transition: transform 0.7s cubic-bezier(0.22, 1, 0.36, 1);
+    pointer-events: none;
+  }
+
+  .btn-hire:hover {
+    transform: translateY(-3px) scale(1.04);
+    box-shadow:
+      0 0 50px rgba(255, 30, 55, 0.65),
+      0 12px 32px rgba(255, 20, 45, 0.45),
+      inset 0 0 22px rgba(255, 100, 120, 0.25),
+      inset 0 1px 0 rgba(255, 200, 210, 0.25);
+    filter: brightness(1.06);
+    animation-play-state: paused;
+  }
+
+  .btn-hire:hover::before {
+    transform: translateX(110%);
+  }
+
+  .btn-hire:active {
+    transform: translateY(-1px) scale(1.01);
+  }
+
+  .btn-hire-label,
+  .btn-hire-arrow {
+    position: relative;
+    z-index: 1;
+  }
+
+  .btn-hire-arrow {
+    display: inline-block;
+    font-family: "Outfit", sans-serif;
+    font-weight: 700;
+    font-size: 1.15em;
+    transition: transform 0.4s cubic-bezier(0.22, 1, 0.36, 1);
+  }
+
+  .btn-hire:hover .btn-hire-arrow {
+    transform: translateX(5px);
+  }
+
+  /* Subtle ongoing pulse so it draws the eye */
+  @keyframes hire-pulse {
+    0%, 100% {
+      box-shadow:
+        0 0 32px rgba(255, 25, 50, 0.4),
+        0 6px 22px rgba(255, 20, 45, 0.3),
+        inset 0 0 18px rgba(255, 100, 120, 0.18),
+        inset 0 1px 0 rgba(255, 200, 210, 0.18);
+    }
+    50% {
+      box-shadow:
+        0 0 45px rgba(255, 35, 60, 0.6),
+        0 8px 28px rgba(255, 25, 50, 0.42),
+        inset 0 0 24px rgba(255, 100, 120, 0.24),
+        inset 0 1px 0 rgba(255, 200, 210, 0.2);
+    }
+  }
+
+  @keyframes text-fade-up {
+    to {
+      opacity: 1;
+      transform: translateY(0);
+    }
+  }
+
+
+  /* ---------- Arrow circle buttons (forward + back, outside the card) ---------- */
+  .btn-arrow,
+  .btn-arrow-back {
+    position: absolute;
+    bottom: clamp(24px, 4.5vmin, 48px);
+    width: clamp(46px, 6.5vmin, 60px);
+    height: clamp(46px, 6.5vmin, 60px);
+    border-radius: 50%;
+    border: 1.5px solid rgba(255, 40, 60, 0.6);
+    background: rgba(255, 25, 45, 0.04);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    color: #ff3550;
+    text-decoration: none;
+    cursor: pointer;
+    z-index: 8;
+    transition:
+      transform 0.5s cubic-bezier(0.22, 1, 0.36, 1),
+      background 0.4s ease,
+      border-color 0.4s ease,
+      box-shadow 0.5s ease,
+      color 0.4s ease;
+    opacity: 0;
+  }
+
+  .btn-arrow {
+    right: clamp(24px, 4.5vmin, 48px);
+    transform: scale(0.7) rotate(-90deg);
+    animation: arrow-fade-in 0.9s cubic-bezier(0.22, 1, 0.36, 1) 1.4s forwards,
+               arrow-pulse 3.2s ease-in-out 2.8s infinite;
+  }
+
+  /* Back-arrow: mirror position + opposite spin-in for symmetry */
+  .btn-arrow-back {
+    left: clamp(24px, 4.5vmin, 48px);
+    transform: scale(0.7) rotate(90deg);
+    animation: arrow-back-fade-in 0.9s cubic-bezier(0.22, 1, 0.36, 1) 1.4s forwards,
+               arrow-pulse 3.2s ease-in-out 2.8s infinite;
+  }
+
+  .btn-arrow:hover,
+  .btn-arrow-back:hover {
+    background: rgba(255, 30, 50, 0.12);
+    border-color: rgba(255, 70, 90, 0.95);
+    transform: scale(1.12);
+    box-shadow:
+      0 0 40px rgba(255, 25, 50, 0.5),
+      inset 0 0 18px rgba(255, 25, 50, 0.18);
+    color: #ff6a82;
+    animation-play-state: paused;
+  }
+
+  .btn-arrow:active,
+  .btn-arrow-back:active {
+    transform: scale(1.03);
+  }
+
+  .btn-arrow svg,
+  .btn-arrow-back svg {
+    width: 45%;
+    height: 45%;
+    transition: transform 0.5s cubic-bezier(0.22, 1, 0.36, 1);
+  }
+
+  /* Forward arrow nudges right on hover; back arrow nudges left */
+  .btn-arrow:hover svg {
+    transform: translateX(4px);
+  }
+  .btn-arrow-back:hover svg {
+    transform: translateX(-4px);
+  }
+
+  @keyframes arrow-fade-in {
+    to {
+      opacity: 1;
+      transform: scale(1) rotate(0);
+    }
+  }
+
+  @keyframes arrow-back-fade-in {
+    to {
+      opacity: 1;
+      transform: scale(1) rotate(0);
+    }
+  }
+
+  /* gentle idle pulse so the arrow feels alive */
+  @keyframes arrow-pulse {
+    0%, 100% {
+      box-shadow: 0 0 0 rgba(255, 25, 50, 0);
+    }
+    50% {
+      box-shadow: 0 0 24px rgba(255, 25, 50, 0.35);
+    }
+  }
+
+  /* ---------- Page transition (smooth fade + scale, not instant) ---------- */
+  body {
+    transition: opacity 0.55s cubic-bezier(0.7, 0, 0.84, 0);
+  }
+
+  body.leaving {
+    opacity: 0;
+  }
+
+  body.leaving .stage {
+    transform: scale(0.96);
+    transition: transform 0.55s cubic-bezier(0.7, 0, 0.84, 0);
+  }
+
+  /* pulse on the clicked button before navigating away */
+  .btn-pulsing {
+    transform: scale(1.1) !important;
+    box-shadow:
+      0 0 80px rgba(255, 30, 50, 0.7),
+      inset 0 0 25px rgba(255, 25, 50, 0.3) !important;
+    transition: transform 0.25s ease, box-shadow 0.25s ease !important;
+  }
+
+  /* ---------- Page indicator (centered, same row as arrow button) ---------- */
+  .page-indicator {
+    position: absolute;
+    bottom: clamp(24px, 4.5vmin, 48px);
+    left: 50%;
+    height: clamp(46px, 6.5vmin, 60px); /* matches arrow button height for true alignment */
+    display: flex;
+    align-items: center;
+    gap: clamp(8px, 1.2vmin, 14px);
+    z-index: 8;
+    font-family: "Outfit", sans-serif;
+    pointer-events: none;
+    user-select: none;
+
+    opacity: 0;
+    transform: translateX(-50%) translateY(10px);
+    animation: indicator-in 0.9s cubic-bezier(0.22, 1, 0.36, 1) 1.55s forwards;
+  }
+
+  .page-indicator .current {
+    font-size: clamp(22px, 3.4vmin, 36px);
+    font-weight: 900;
+    line-height: 1;
+    color: #ff3550;
+    letter-spacing: 0.02em;
+    text-shadow:
+      0 0 18px rgba(255, 30, 50, 0.55),
+      0 0 40px rgba(255, 20, 45, 0.3);
+    animation: indicator-glow 3s ease-in-out 2.2s infinite;
+  }
+
+  .page-indicator .divider {
+    display: inline-block;
+    width: clamp(14px, 2vmin, 22px);
+    height: 1.5px;
+    background: linear-gradient(
+      90deg,
+      rgba(255, 50, 70, 0.85) 0%,
+      rgba(255, 50, 70, 0.25) 100%
+    );
+    border-radius: 2px;
+  }
+
+  .page-indicator .total {
+    font-size: clamp(14px, 2.1vmin, 22px);
+    font-weight: 500;
+    line-height: 1;
+    color: rgba(255, 255, 255, 0.45);
+    letter-spacing: 0.05em;
+  }
+
+  @keyframes indicator-in {
+    to {
+      opacity: 1;
+      transform: translateX(-50%) translateY(0);
+    }
+  }
+
+  /* subtle pulse on the current number — feels alive */
+  @keyframes indicator-glow {
+    0%, 100% {
+      text-shadow:
+        0 0 18px rgba(255, 30, 50, 0.55),
+        0 0 40px rgba(255, 20, 45, 0.3);
+    }
+    50% {
+      text-shadow:
+        0 0 28px rgba(255, 40, 65, 0.8),
+        0 0 60px rgba(255, 25, 50, 0.45);
+    }
+  }
+
+  /* ---------- Responsive ---------- */
+
+  /* Small phones (e.g. iPhone SE) */
+  @media (max-width: 380px) {
+    .card {
+      width: min(90vw, 65vh);
+    }
+    .portrait {
+      width: 46%;
+      top: -11%;
+    }
+  }
+
+  /* Standard mobile portrait */
+  @media (max-width: 640px) {
+    .card {
+      width: min(88vw, 65vh);
+    }
+    .portrait {
+      top: -12%;
+      width: 44%;
+    }
+  }
+
+  /* Tablets — keep card moderate so it doesn't dominate */
+  @media (min-width: 641px) and (max-width: 1024px) {
+    .card {
+      width: min(60vw, 70vh, 540px);
+    }
+  }
+
+  /* Landscape phones / very short viewports — height is the bottleneck */
+  @media (max-height: 520px) and (orientation: landscape) {
+    .card {
+      width: min(40vw, 75vh);
+      border-radius: clamp(22px, 5vmin, 36px);
+    }
+    .portrait {
+      top: -16%;
+      width: 38%;
+    }
+    .logo {
+      height: clamp(26px, 5vmin, 36px);
+    }
+  }
+
+  /* Respect users who prefer reduced motion */
+  @media (prefers-reduced-motion: reduce) {
+    *,
+    *::before,
+    *::after {
+      animation-duration: 0.01ms !important;
+      animation-iteration-count: 1 !important;
+      transition-duration: 0.01ms !important;
+    }
+    .logo,
+    .card,
+    .portrait {
+      opacity: 1 !important;
+      transform: translate(-50%, -50%) !important;
+    }
+    .logo {
+      transform: none !important;
+    }
+    .portrait {
+      transform: translateX(-50%) !important;
+    }
+  }
+</style>
+</head>
+<body>
+  <div class="stage">
+    <div class="grid"></div>
+    <div class="glow-tr"></div>
+    <div class="glow-bl"></div>
+    <div class="vignette"></div>
+
+    <img src="assets/logo.png" alt="ZT Labs" class="logo" />
+
+    <div class="card">
+      <div class="portrait">
+        <img src="assets/work.png" alt="projects" />
+      </div>
+
+      <div class="card-content">
+        <h1 class="projects-title">Projects</h1>
+        <p class="projects-subtitle">Selected works &amp; experiments</p>
+
+        <!-- Project rows — each links to its own page (p1.html ... p5.html) -->
+        <div class="projects-list">
+          <a href="p1.html" class="project-link" data-transition>
+            <span class="project-info">
+              <span class="project-name">Washan Media</span>
+              <span class="project-tag">Media-Related Website</span>
+            </span>
+            <svg class="project-arrow" viewBox="0 0 24 24" fill="none" stroke="currentColor"
+                 stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+              <line x1="5" y1="12" x2="19" y2="12"></line>
+              <polyline points="12 5 19 12 12 19"></polyline>
+            </svg>
+          </a>
+
+          <a href="p2.html" class="project-link" data-transition>
+            <span class="project-info">
+              <span class="project-name">Flour Factory ML System</span>
+              <span class="project-tag">OpenCV project</span>
+            </span>
+            <svg class="project-arrow" viewBox="0 0 24 24" fill="none" stroke="currentColor"
+                 stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+              <line x1="5" y1="12" x2="19" y2="12"></line>
+              <polyline points="12 5 19 12 12 19"></polyline>
+            </svg>
+          </a>
+
+          <a href="p3.html" class="project-link" data-transition>
+            <span class="project-info">
+              <span class="project-name">KurdCommerce</span>
+              <span class="project-tag">E-commerce & Retail system</span>
+            </span>
+            <svg class="project-arrow" viewBox="0 0 24 24" fill="none" stroke="currentColor"
+                 stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+              <line x1="5" y1="12" x2="19" y2="12"></line>
+              <polyline points="12 5 19 12 12 19"></polyline>
+            </svg>
+          </a>
+
+          <a href="p4.html" class="project-link" data-transition>
+            <span class="project-info">
+              <span class="project-name">ZT Store</span>
+              <span class="project-tag">Progressive Web App store</span>
+            </span>
+            <svg class="project-arrow" viewBox="0 0 24 24" fill="none" stroke="currentColor"
+                 stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+              <line x1="5" y1="12" x2="19" y2="12"></line>
+              <polyline points="12 5 19 12 12 19"></polyline>
+            </svg>
+          </a>
+
+          <a href="p5.html" class="project-link" data-transition>
+            <span class="project-info">
+              <span class="project-name">ZT MockUp Studio</span>
+              <span class="project-tag">Creative tool</span>
+            </span>
+            <svg class="project-arrow" viewBox="0 0 24 24" fill="none" stroke="currentColor"
+                 stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+              <line x1="5" y1="12" x2="19" y2="12"></line>
+              <polyline points="12 5 19 12 12 19"></polyline>
+            </svg>
+          </a>
+        </div>
+
+        <hr class="divider" />
+
+        <div class="cta-block">
+          <p class="cta-text">Interested in my work or want to build something awesome together?</p>
+          <a href="contact.html" class="btn-hire" data-transition>
+            <span class="btn-hire-label">HIRE ME</span>
+            <span class="btn-hire-arrow" aria-hidden="true">&rarr;</span>
+          </a>
+        </div>
+      </div>
+    </div>
+
+    <a href="skill.html" class="btn-arrow-back" data-transition aria-label="Back to skills">
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"
+           stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+        <line x1="19" y1="12" x2="5" y2="12"></line>
+        <polyline points="12 19 5 12 12 5"></polyline>
+      </svg>
+    </a>
+
+    <a href="service.html" class="btn-arrow" data-transition aria-label="Go to next page">
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"
+           stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+        <line x1="5" y1="12" x2="19" y2="12"></line>
+        <polyline points="12 5 19 12 12 19"></polyline>
+      </svg>
+    </a>
+
+    <div class="page-indicator" aria-label="Page 3 of 5">
+      <span class="current">03</span>
+      <span class="divider" aria-hidden="true"></span>
+      <span class="total">05</span>
+    </div>
+  </div>
+
+  <script>
+    document.querySelectorAll('[data-transition]').forEach(link => {
+      link.addEventListener('click', (e) => {
+        e.preventDefault();
+        const href = link.getAttribute('href');
+        link.classList.add('btn-pulsing');
+        setTimeout(() => document.body.classList.add('leaving'), 180);
+        setTimeout(() => { window.location.href = href; }, 640);
+      });
+    });
+  </script>
+</body>
+</html>
